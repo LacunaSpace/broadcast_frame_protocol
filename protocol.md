@@ -21,8 +21,6 @@ An example of a satellite broadcasting on three different frequencies looks like
     |         +-----------------+
     |         |   Almanac data  |
     |         +-----------------+
-    |         | End of sequence |
-    |         +-----------------+
     |
     |                             +-----------------+
     |                             |   Wakeup frame  |
@@ -33,8 +31,6 @@ An example of a satellite broadcasting on three different frequencies looks like
     |                             +-----------------+
     |                             |   Almanac data  |
     |                             +-----------------+
-    |                             | End of sequence |
-    |                             +-----------------+
     |
     |                                                 +-----------------+
     |                                                 |   Wakeup frame  |
@@ -44,8 +40,6 @@ An example of a satellite broadcasting on three different frequencies looks like
     |                                                 |   Almanac data  |
     |                                                 +-----------------+
     |                                                 |   Almanac data  |
-    |                                                 +-----------------+
-    |                                                 | End of sequence |
     |                                                 +-----------------+
     |
     |         +-----------------+
@@ -89,7 +83,6 @@ frame-types are known:
 * `0`: Wakeup frame
 * `1`: Almanac data frame
 * `2`: Wakeup signature frame
-* `3`: End-of-sequence frame
 
 ## Wakeup frame format
 The wakeup frame is a proprietary LoraWAN frame with a frame-type of `0`.
@@ -291,12 +284,6 @@ The offset of the data in the block within the almanac data is simply `block_siz
 All blocks except for the last one (that is, the one with blocknumber `total_blocks-1`)
 will be exactly of size `block_size`. The last one will generally be shorter.
 
-## End-of-sequence frame format
-The end-of-sequence frame is a proprietary LoraWAN frame with a frame-type of `2`.
-
-The data following the frame-type is undefined - it may be empty, or it may be used
-by later specifications.
-
 # Frequency-cycling
 As described in the introduction, satellites will broadcast on one or more frequencies.
 The idea is that terminals will normally try to receive the sequences on all 
@@ -324,14 +311,9 @@ of frame.
 
 If it is a wakeup-frame, it will parse it and use the data in the wakeup frame
 to determine if it wants to receive and process some or all data of the subsequent
-messages of the sequence. If so, it will receive frames until either:
-* The total number of frames in the sequence (as present in the fixed header of
-  the wakeup frame) has been reached, or
-* The end-of-sequence frame has been received, or
-* The time between wakeup frames (as present in the fixed header of the wakeup 
-  frame) has been reached. This is a fallback in case on or more of the frames
-  in the sequence could not be received for some reason.
-After this, tht terminal will switch to the next frequency in the list, and wait
+messages of the sequence. If so, it will receive frames until the sequence duration
+as announced in the wakeup frame has been reached.
+After this, the terminal will switch to the next frequency in the list, and wait
 for next wakeup frame.
 
 If it is not a wakeup-frame, the terminal has no way to know where in the sequence
