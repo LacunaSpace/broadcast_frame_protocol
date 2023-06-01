@@ -100,12 +100,9 @@ The fixed header has a fixed length, the length of the TLVs is variable.
 
 ### Fixed header
 The fixed header consists of 5 bytes, as follows:
-* Total frames following (`uint8_t`): the total number of frames
-  following the wakeup frame. This includes the signature frame
-  and almanac frames, if present, but may also include additional
-  frames that are not announced in the wakup frame (for example
-  LoraWAN multicast frames that are received autonomously by devices on the
-  ground). It also includes the end-of-sequence frame.
+* Sequence duration (`uint8_t`): the time in seconds, rounded up to the nearest
+  second, between the end of the wakeup frame and the end of the preamble of
+  the last frame in the sequence.
 * Transmitting satellite ID (`uint8_t`): numeric ID uniquely identifying
   the transmitting satellite. This is the same ID as used in the almanac.
 * Time between wakeup frames (`uint16_t`, BE): the time in seconds between the
@@ -200,7 +197,7 @@ to decide if it needs to receive the almanac. The payload of this TLV consists
 of 16 bytes, as follows:
 
 * Number of blocks following wakeup frame (`uint8_t`). This is just the number
-  of blocks following the wakeup frame (or wakeup signature frame) which is 
+  of blocks contained in this sequence which is 
   in general not enough to contain an entire almanac.
 * Almanac version (`uint8_t`)
 * Almanac valid from, as seconds since 1/1/1970 (`uint32_t`, BE)
