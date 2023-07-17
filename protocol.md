@@ -2,7 +2,7 @@
 Transmitting satellites broadcast LoRa message-sequences. Each sequence consists
 of a wakeup-frame, an optional wakeup signature frame, and zero or more dataframes.
 Some of the dataframes will contain almanac-data, but there may be other types
-of dataframes as well. Finally there is an end-of-sequence frame.
+of dataframes as well. 
 
 Satellites may broadcast message-sequences on one or more frequencies. When broadcasting
 on more than one frequency, the satellite will alternate sequences between frequencies.
@@ -55,21 +55,20 @@ An example of a satellite broadcasting on three different frequencies looks like
 
 A few remarks about the example (concepts discussed in more detail later):
 * In the example, there is a pause after the wakeup frame, but not between
-  consecutive almanac data frames, or between the final almanac data frame and
-  the end-of-sequence frame. This is representative og the actual timing - there
+  consecutive almanac data frames. This is representative of the actual timing - there
   is a pause after the wakeup frame but not between data-frames.
 * The example does not contain wakeup signature frames. If it would, they would 
   immediately follow the wakeup frame, without pause.
-* In the example, the wakeup frame and the subsequent almanac data frames (and
-  the end-of-sequence frame) are all transmitted on the same frequency. It is
+* In the example, the wakeup frame and the subsequent almanac data frames 
+  are all transmitted on the same frequency. It is
   possible for the wakeup frame to contain data that indicates that the remainder
   of the sequence is broadcast on a different frequency.
 * Apart from almanac data, the sequence could contain other frame-types as well.
   Those are not shown in the example.
 
 # Frame format
-Wakeup frames, wakeup signature frames, almanac data frames and end-of-sequence
-frames all share a common layout (other data frames may or may not use the same
+Wakeup frames, wakeup signature frames, and almanac data frames 
+all share a common layout (other data frames may or may not use the same
 format). 
 
 At top-level they are LoraWAN frames, but with a frame-type of `proprietary` (the
@@ -316,7 +315,6 @@ as announced in the wakeup frame has been reached.
 After this, the terminal will switch to the next frequency in the list, and wait
 for next wakeup frame.
 
-If it is not a wakeup-frame, the terminal has no way to know where in the sequence
-it is, and therefore it will keep receiving frames until the end-of-sequence frame
-is received. After having received it, it will switch to the next frequency in the
-list, and start receiving. The first frame it receives now should be a wakeup frame.
+If it is not a wakeup-frame, the terminal ignores it and keep trying to receive
+a wakeup-frame without restarting the timeout timer.
+
