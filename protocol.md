@@ -196,7 +196,8 @@ of 16 bytes, as follows:
 * Localisation ID (`uint8_t`)
 * Service provider mask (`uint16_t`, BE)
 * Expected CRC (`uint32_t`, BE). This is the 32-bit integer formed by the
-  first 4 bytes of the SHA-2 digest over the almanac data.
+  first 4 bytes of the SHA-2 digest over the almanac data that follows the 
+  signatures.
 * Almanac size in bytes (`uint16_t`, BE)
 * Block size (`uint8_t`, BE)
 

@@ -1,3 +1,8 @@
+2.0.2
+=====
+* Give more precise description of almanac CRC calculation in "almanac follows" 
+  TLV
+
 2.0.1
 =====
 * Remove references to end-of-sequence frame from protocol.md (issue #3)
